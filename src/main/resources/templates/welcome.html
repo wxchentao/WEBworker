@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-DFRZ</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet"  th:href="@{/css/font.css}">
+    <link rel="stylesheet"  th:href="@{/css/xadmin.css}">
+    <script type="text/javascript" th:src="@{/plugins/jquery/jquery.min.js}" ></script>
+    <script  th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<br>
+<fieldset class="layui-elem-field" >
+    <legend style="text-align: center">
+        <span class="layui-badge-dot"></span>
+        <span class="layui-badge-dot layui-bg-orange"></span>
+        <span class="layui-badge-dot layui-bg-green"></span>
+        <span class="layui-badge-dot layui-bg-cyan"></span>
+        <span class="layui-badge-dot layui-bg-blue"></span>
+        <span class="layui-badge-dot layui-bg-black"></span>
+        <span class="layui-badge-dot layui-bg-gray"></span>
+        LONG ISLAND ICED TEA
+
+        <span class="layui-badge-dot layui-bg-gray"></span>
+        <span class="layui-badge-dot layui-bg-black"></span>
+        <span class="layui-badge-dot layui-bg-blue"></span>
+        <span class="layui-badge-dot layui-bg-cyan"></span>
+        <span class="layui-badge-dot layui-bg-green"></span>
+        <span class="layui-badge-dot layui-bg-orange"></span>
+        <span class="layui-badge-dot"></span>
+    </legend>
+    <br>
+    <div class="layui-carousel" id="test1" lay-filter="carofilter" style="font-size:larger">
+        <div carousel-item>
+            <div style="background-color:red"><img src="/images/banner1.png"></div>
+            <div style="background-color:green"><img src="/images/banner2.png"></div>
+            <div style="background-color:blue"><img src="/images/banner3.png"></div>
+            <div style="background-color:mediumorchid"><img src="/images/banner4.png"></div>
+            <div style="background-color:orange"><img src="/images/banner5.png"></div>
+        </div>
+    </div>
+    <!-- 条目中可以是任意内容，如：<img src=""> -->
+    <script>
+        layui.use('carousel', function () {
+            var carousel = layui.carousel;
+            //***************************建造实例
+            var ins=carousel.render({
+                elem: '#test1'
+                , width: '1500px'     //设置容器宽度
+                , height:'500px'
+                , arrow: 'always'    //始终显示箭头，可选hover,none
+                //,anim: 'updown'    //切换动画方式，可选fade,default
+                , full: false        //全屏
+                , autoplay: true     //自动切换
+                , interval: 2000     //自动切换的时间间隔
+                , index: 3           //初始化时item索引,默认时0
+                , indicator:'inside' //指示器位置，可选outside,none
+            });
+
+            //**************************监听轮播切换事件
+            carousel.on('change(carofilter)', function (obj) { //test1来源于对应HTML容器的 lay-filter="test1" 属性值
+                console.log(obj.index);     //当前条目的索引
+                console.log(obj.prevIndex); //上一个条目的索引
+                console.log(obj.item);      //当前条目的元素对象
+            });
+
+            //****************************重置轮播
+            //var ins = carousel.render(options);
+            ins.reload({arrow:'hover'});//将arror从alway变成hover
+        });
+    </script>
+
+
+    <div class="layui-field-box">
+        <table class="layui-table">
+            <tbody>
+            <tr>
+                <th>小组成员</th></tr>
+            <tr>
+                <th>吴宇佳</th>
+            </tr>
+            <tr>
+                <th>陈艺霞</th>
+            </tr>
+            <tr>
+                <th>刘菱</th>
+            </tr>
+            <tr>
+                <th>胡恒娟</th>
+            </tr>
+            <tr>
+                <th>陈韬</th>
+            </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+</fieldset>
+<div class="layui-collapse" lay-accordion>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">吴宇佳</h2>
+        <div class="layui-colla-content layui-show">内容区域</div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">陈艺霞</h2>
+        <div class="layui-colla-content layui-show">内容区域</div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">刘菱</h2>
+        <div class="layui-colla-content layui-show">内容区域</div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">胡恒娟</h2>
+        <div class="layui-colla-content layui-show">内容区域</div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">陈韬</h2>
+        <div class="layui-colla-content layui-show">内容区域</div>
+    </div>
+</div>
+</div>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.UserMapper" >
+    <!--定义结果映射-->
+    <resultMap id="UserResultMap" type="com.example.demo.bean.User">
+        <!--主键-->
+        <id column="id" property="id"></id>
+        <!--普通字段-->
+        <result column="uname" property="uname"></result>
+        <result column="upass" property="upass"></result>
+    </resultMap>
+    <!--定义查询-->
+    <select id="getUserById" resultMap="UserResultMap">
+        select a.id,a.uname,a.upass from t_user a where id=#{id}
+    </select>
+    <select id="stopUserById" resultMap="UserResultMap">
+        UPDATE t_user SET isenabled = '2' WHERE id=#{id}
+    </select>
+
+    <select id="startUserById" resultMap="UserResultMap">
+        UPDATE t_user SET isenabled = '1' WHERE id=#{id}
+    </select>
+    <select id="selectUserSlur" resultMap="UserResultMap">
+     select * from t_user where role ='2'
+   </select>
+    <select id="selectUseradmin" resultMap="UserResultMap">
+     select * from t_user where role ='1'
+   </select>
+    <select id="selectUserteacher" resultMap="UserResultMap">
+     select * from t_user where role ='3'
+   </select>
+
+<select id="findUserByUnameAndUpass" resultMap="UserResultMap">
+        select a.* from t_user a where uname=#{uname} and upass=#{upass}
+    </select>
+<select id="findByMail" resultMap="UserResultMap">
+        select a.* from t_user a where email=#{email}
+    </select>
+</mapper>

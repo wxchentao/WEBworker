@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>找回密码-DFRZ</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet"  th:href="@{/css/font.css}">
+    <link rel="stylesheet"  th:href="@{/css/xadmin.css}">
+    <script type="text/javascript" th:src="@{/plugins/jquery/jquery.min.js}" ></script>
+    <script  th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-body layui-anim layui-anim-up">
+    <br><br>
+    <form class="layui-form">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" id="L_email" name="email" placeholder="请输入接收验证码的邮箱"required="" lay-verify="email"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <button  class="layui-btn  layui-btn-warm " lay-filter="add" lay-submit="">
+                发送验证码
+            </button>
+        </div>
+<br>
+    </form>
+    <div>
+        <div class="layui-form-item">
+        <label class="layui-form-label">验证码</label>
+        <div class="layui-input-inline">
+
+            <input type="text" name="title" id="txt" placeholder="请输入验证码" class="layui-input">
+        </div>
+        <button id="btnLayUI" onclick="check()" class="layui-btn layui-btn-normal">
+            验证后登录
+        </button>
+    </div>
+    </div>
+
+
+</div>
+</div>
+</div>
+<script>
+    var getdata;
+    var mail;
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+            console.log(data.field.email);
+            console.log(JSON.stringify(data.field.email));
+            mail= data.field.email;
+            //收件人邮箱
+            var toEmailAddress = data.field.email;
+            //var toEmailAddress = JSON.stringify(data.field.email);
+            //var toEmailAddress = "1051088669@qq.com";
+            $.ajax({
+                type: "post",
+                url: "/sendEmailSystem",
+                data: {
+                    toEmailAddress: toEmailAddress
+                },
+                dataType: "json",
+                success: function (data) {
+                    if(data.code > 0){
+                        //alert("邮件发送成功，验证码为：" + data.msg);
+                        console.log(data.msg);
+                        getdata=data.msg;
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+            });
+            return false;
+        })
+    })
+    function check() {
+        var input=document.getElementById("txt");
+        var value=input.value;
+        console.log(value);
+        console.log(getdata);
+        console.log(mail);
+        if(value==getdata){
+            $.ajax({
+                type: "post",
+                url:"/user/doMail_login",
+                data: {
+                    email: mail
+                },
+                dataType:"json",
+                success:function (data) {
+                    if(data.code==10000){
+                        layer.msg(data.msg,function(){
+                            //前端跳转页面
+                            window.open('/portal_index');
+                            window.open("about:blank","_self").close();
+                            //window.top.close();
+                            //parent.window.top.close();
+                            //location.href='/portal_index';
+                            //window.location.href='/portal_index';
+                        });
+                    }
+                    else{
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        }
+    }
+
+</script>
+
+</body>
+
+</html>

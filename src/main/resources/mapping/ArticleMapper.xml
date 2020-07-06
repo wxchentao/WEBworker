@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.ArticleMapper" >
+    <!--定义结果映射-->
+    <resultMap id="ArticleResultMap" type="com.example.demo.bean.Article">
+        <!--主键-->
+        <id column="id" property="id"></id>
+        <!--普通字段-->
+        <result column="title" property="title"></result>
+        <result column="scontent" property="scontent"></result>
+        <result column="atime" property="atime" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--定义查询-->
+
+    <select id="selectArticle1" resultMap="ArticleResultMap">
+     select * from t_article where atype ='1'
+   </select>
+    <select id="selectArticle2" resultMap="ArticleResultMap">
+     select * from t_article where atype ='2'
+   </select>
+    <select id="selectArticle3" resultMap="ArticleResultMap">
+     select * from t_article where atype ='3'
+   </select>
+    <select id="selectArticle4" resultMap="ArticleResultMap">
+     select * from t_article where atype ='4'
+   </select>
+</mapper>
