@@ -11,7 +11,7 @@ spring:
     suffix: .html  #后缀名
   datasource:
     name: test
-    url: jdbc:mysql://49.235.253.115:3306/edusys?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/edusys?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     username: root
     password: 123456
     # 使用druid数据源

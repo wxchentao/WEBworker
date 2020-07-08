@@ -17,12 +17,12 @@ import com.sun.mail.util.MailSSLSocketFactory;
 public class SendmailUtil {
     //邮件服务器主机名
     // QQ邮箱的 SMTP 服务器地址为: smtp.qq.com
-    private static String myEmailSMTPHost = "smtp.qq.com";
+    private static String myEmailSMTPHost = "smtp.163.com";
     //发件人邮箱
-    private static String myEmailAccount = "1051088669@qq.com";
+    private static String myEmailAccount = "liit229@163.com";
     //发件人邮箱密码（授权码）
     //在开启SMTP服务时会获取到一个授权码，把授权码填在这里
-    private static String myEmailPassword = "vypfmpzjqfcybchb";
+    private static String myEmailPassword = "QDAMIESIFNXWAFWJ";
     /**
          * 邮件单发（自由编辑短信，并发送，适用于私信）
          *
