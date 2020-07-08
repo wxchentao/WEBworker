@@ -38,8 +38,8 @@
         <form class="layui-form layui-col-md12 x-so">
           <input class="layui-input" placeholder="开始日" name="start" id="start">
           <input class="layui-input" placeholder="截止日" name="end" id="end">
-          <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+          <input type="text" name="title"  placeholder="请输入标题" autocomplete="off" class="layui-input">
+          <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <xblock>
@@ -204,6 +204,40 @@
 
 
     </script>
+
+
+  <script>
+    layui.use(['form','layer'],function () {
+      $=layui.jquery;
+      var form= layui.form
+              ,layer=layui.layer;
+      form.on('submit(search)',function (data) {
+        console.log(JSON.stringify(data.field));
+        $.ajax({
+          url:"/article/getArticles/",
+          dataType:"json",
+          data:data.field,
+          success:function (res) {
+            if(res.code==0)
+            {
+              var table = layui.table;
+              table.reload('idTest',{
+                url:'/article/getArticles/'
+                ,where:{title:data.field.title}
+              });
+            }
+            else{
+              layer.alert("搜索失败");
+            }
+          }
+        });
+        return false;
+      });
+
+    });
+  </script>
+
+
     <script>
       layui.use('table', function(){
         var table = layui.table;
@@ -220,6 +254,7 @@
             //页码和显示数量
             }
           ,method: 'post'
+          ,id:'idTest'
           ,cols: [
                   [
             {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}

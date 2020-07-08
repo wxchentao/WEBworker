@@ -34,10 +34,10 @@
 <div class="x-body">
   <div class="layui-row">
     <form class="layui-form layui-col-md12 x-so">
-      <input class="layui-input" placeholder="开始日" name="start" id="start">
-      <input class="layui-input" placeholder="截止日" name="end" id="end">
-      <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-      <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+<!--      <input type="text" name="userid"  placeholder="请输入id" autocomplete="off" class="layui-input">-->
+
+      <input type="text" name="uname"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      <button class="layui-btn"  lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
     </form>
   </div>
   <xblock>
@@ -202,6 +202,57 @@
 
 
 </script>
+
+
+
+
+<script>
+  layui.use(['form','layer'], function(){
+    $ = layui.jquery;
+    var form = layui.form
+            ,layer = layui.layer;
+
+
+    //监听提交
+    form.on('submit(search)', function(data){
+      console.log(data);
+      console.log(JSON.stringify(data.field));
+      $.ajax({
+        url:"/user/getUsers",
+        dataType:"json",
+        data:data.field,
+        success:function (res) {
+          if(res.code==0) {
+            var table = layui.table;
+            table.reload(
+                    'idTest', {
+                      url: "/user/getUsers",
+                      where: {uname: data.field.uname}
+                    }
+            );
+          }
+
+          else {
+            layer.alert("搜索失败");
+          }
+        }
+      });
+
+      return false;
+    });
+
+
+  });
+</script>
+
+
+
+
+
+
+
+
+
 <script>
   layui.use('table', function(){
     var table = layui.table;
@@ -212,6 +263,7 @@
       ,height: 312
       ,url: '/user/getUsers' //数据接口
       ,page: true //开启分页
+      ,id: 'idTest'
       ,cols: [
         [ //表头
           {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
@@ -252,7 +304,7 @@
       var data =obj.data;
       switch(obj.event){
         case 'detail':
-          x_admin_show('编辑用户','/user/toView/'+data.id,600,400);
+          x_admin_show('编辑用户','/user/toView/'+data.id,800,600);
           break;
 
         case 'onoff':
@@ -273,7 +325,7 @@
 
         case 'edit':
           //layer.msg('编辑：【id='+data.id+'】,uname='+data.uname+'】');
-          x_admin_show('编辑用户','/user/toEdit/'+data.id,600,400);
+          x_admin_show('编辑用户','/user/toEdit/'+data.id,800,600);
           break;
         case 'del':
           layer.confirm("确认删除吗？",function () {

@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.example.demo.Result.Result;
 import com.example.demo.Result.ResultEnum;
@@ -16,9 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,15 +51,23 @@ public class UserController {
         User user = new User();
         user.setUname(uname);
         user.setUpass(upass);
-        User loginUser = userService.login(user);
-        if (loginUser != null && (loginUser.getRole()).endsWith("1")) {
-            result = ResultUtils.success(user);
-        } else {
+        try {
+            User loginUser = userService.login(user);
+            if (loginUser != null && (loginUser.getRole()).endsWith("1")) {
+                result = ResultUtils.success(user);
+                result.setMsg(user.getUname());
+            } else {
+                result = ResultUtils.success(user);
+                result.setCode(ResultEnum.LOGIN_FAILS.getCode());
+                result.setMsg(ResultEnum.LOGIN_FAILS.getMsg());
+            }
+            return result;
+        }catch (Exception e){
             result = ResultUtils.success(user);
             result.setCode(ResultEnum.LOGIN_FAILS.getCode());
             result.setMsg(ResultEnum.LOGIN_FAILS.getMsg());
+            return result;
         }
-        return result;
 
     }
     @RequestMapping("/toLogin")
@@ -147,14 +163,25 @@ public class UserController {
 //        return result;
 //    }
 @RequestMapping("/getUsers")
-public Result getUsers(){
-    Result result=null;
-    List<User> list=userService.getUsers();
-    result=ResultUtils.success(list);
+public Result getUsers(@RequestParam(value="uname",required = false,defaultValue = "") String uname) {
+    QueryWrapper<User> wrapper = new QueryWrapper();
+    wrapper.like("uname", uname);
+    List<User> list = userService.findUserByName(wrapper);
+    Result result = null;
+    result = ResultUtils.success(list);
+    result.setData(list);
     result.setCode(0);
     result.setMsg("查询成功");
     return result;
 }
+//public Result getUsers(){
+//    Result result=null;
+//    List<User> list=userService.getUsers();
+//    result=ResultUtils.success(list);
+//    result.setCode(0);
+//    result.setMsg("查询成功");
+//    return result;
+//}
     @RequestMapping("/getStu_list")
     public Result getStu_list(){
         Result result=null;
@@ -260,6 +287,27 @@ public Result getUsers(){
         User user=userService.getUserById(id);
         //设置数据
         mv.addObject("user",user);
+        mv.addObject("url","/user/"+user.getHeadpic());
+        return mv;
+    }
+    @RequestMapping("/toView2/{id}")
+    public ModelAndView toView2(@PathVariable Integer id){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("user_view2");
+        User user=userService.getUserById(id);
+        //设置数据
+        mv.addObject("user",user);
+        mv.addObject("url","/user/"+user.getHeadpic());
+        return mv;
+    }
+    @RequestMapping("/toView3/{id}")
+    public ModelAndView toView3(@PathVariable Integer id){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("user_edit2");
+        User user=userService.getUserById(id);
+        //设置数据
+        mv.addObject("user",user);
+        mv.addObject("url","/user/"+user.getHeadpic());
         return mv;
     }
     @RequestMapping("/view")
@@ -282,25 +330,38 @@ public Result getUsers(){
         }
         return result;
     }
-//    前端登录
-@RequestMapping("/doPortal_login")
-public Result portal_login(String uname, String upass) {
-    Result result = null;
-    System.out.println("执行前端用户登陆.....");
-    System.out.println("【用户名】" + uname + ",【密码】" + upass);
-    User user = new User();
-    user.setUname(uname);
-    user.setUpass(upass);
-    User loginUser = userService.login(user);
-    if (loginUser != null && ((loginUser.getRole()).endsWith("2") || (loginUser.getRole()).endsWith("3"))) {
-        result = ResultUtils.success(user);
-    } else {
-        result = ResultUtils.success(user);
-        result.setCode(ResultEnum.LOGIN_FAILS.getCode());
-        result.setMsg(ResultEnum.LOGIN_FAILS.getMsg());
+    //    前端登录
+    @RequestMapping("/doPortal_login")
+    public Result portal_login(String uname, String upass, HttpSession session) {
+        Result result = null;
+        System.out.println("执行前端用户登陆.....");
+        System.out.println("【用户名】" + uname + ",【密码】" + upass);
+        User user = new User();
+        user.setUname(uname);
+        user.setUpass(upass);
+        session.setAttribute("sessionuser",user);
+        try {
+            User loginUser = userService.login(user);
+            if (loginUser != null && ((loginUser.getRole()).endsWith("2") || (loginUser.getRole()).endsWith("3"))) {
+                result = ResultUtils.success(user);
+                result.setMsg(user.getUname());
+            } else {
+                result = ResultUtils.success(user);
+                result.setCode(ResultEnum.LOGIN_FAILS.getCode());
+                result.setMsg(ResultEnum.LOGIN_FAILS.getMsg());
+            }
+            session.setAttribute("sessionuser",user);
+            return result;
+        }
+        catch (Exception e){
+            result = ResultUtils.success(user);
+            result.setCode(ResultEnum.LOGIN_FAILS.getCode());
+            result.setMsg(ResultEnum.LOGIN_FAILS.getMsg());
+            return result;
+        }
     }
-    return result;
-}
+
+
     @RequestMapping("/toPortal_login")
     public ModelAndView toPortal_login(){
         ModelAndView mv=new ModelAndView();
@@ -329,11 +390,48 @@ public Result portal_login(String uname, String upass) {
         User loginUser = userService.login(user);
         if (loginUser != null && ((loginUser.getRole()).endsWith("2") || (loginUser.getRole()).endsWith("3"))) {
             result = ResultUtils.success(user);
+            result.setMsg(user.getUname());
         } else {
             result = ResultUtils.success(user);
             result.setCode(ResultEnum.LOGIN_FAILS.getCode());
             result.setMsg(ResultEnum.LOGIN_FAILS.getMsg());
         }
         return result;
+    }
+//    @RequestMapping("/getlist")
+//    public Result getList(@RequestParam(value="uname",required = false,defaultValue = "") String uname){
+//        QueryWrapper<User> wrapper=new QueryWrapper();
+//        wrapper.like("uname",uname);
+//        List<User> list=userService.findUserByName(wrapper);
+//        Result result=null;
+//        result=ResultUtils.success(list);
+//        result.setData(list);
+//        result.setCode(0);
+//        result.setMsg("查询成功");
+//        return result;
+//
+//    }
+@RequestMapping("/BarGraph")
+public ModelAndView userBarGraph(){
+    ModelAndView mv=new ModelAndView();
+    System.out.println("查看图标");
+    mv.setViewName("userBarGraph");
+    return mv;
+}
+    @RequestMapping("/toRegister2")
+    public ModelAndView toRegister2(){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("user_register2");
+        return mv;
+    }
+    @RequestMapping("/toEdit2/{id}")
+    public ModelAndView toEdit2(@PathVariable Integer id){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("user_edit3");
+        User user=userService.getUserById(id);
+        //设置数据
+        mv.addObject("user",user);
+        mv.addObject("url","/user/"+user.getHeadpic());
+        return mv;
     }
 }

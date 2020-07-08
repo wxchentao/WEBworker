@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.CommentMapper" >
+    <!--定义结果映射-->
+    <select id="selectCommentsByid" parameterType="int" resultMap="CommentResultMap">
+        select c.username,c.comment,c.time from t_comment c, t_question1 q where c.qid=q.id and q.id=#{id}
+    </select>
+    <!-- 使用resultMap映射实体类和字段之间的一一对应关系 -->
+    <resultMap type="com.example.demo.bean.Comment" id="CommentResultMap">
+        <id property="id" column="id"/>
+        <result property="qid" column="qid"/>
+        <result property="comment" column="comment"/>
+        <result property="username" column="username"/>
+        <result property="time" column="time"/>
+        <association property="qid" javaType="com.example.demo.bean.Question">
+            <id property="id" column="id"/>
+        </association>
+    </resultMap>
+</mapper>

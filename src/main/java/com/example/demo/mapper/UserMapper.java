@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.bean.User;
 
@@ -14,4 +15,7 @@ public User getUserById(Integer id);
     public List<User> selectUserteacher(Integer id);
     public User findUserByUnameAndUpass(String uname,String upass);
     public User findByMail(String email);
+
+    public User selectByUname(String uname);
+
 }

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.demo.bean.User;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public interface IUserService {
     public List<User> selectUseradmin(Integer id);
     public List<User> selectUserteacher(Integer id);
 
+    public List<User> findUserByName(QueryWrapper wrapper);
 
-
+    public User getUserByUname(String uname);
 }

@@ -11,15 +11,26 @@ public class Type {
     private String typename;
     private String atype;
     private int rank;
+    private String html;
+
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
 
     public Type() {
     }
 
-    public Type(Integer id, String typename, String atype, int rank) {
+    public Type(Integer id, String typename, String atype, int rank, String html) {
         this.id = id;
         this.typename = typename;
         this.atype = atype;
         this.rank = rank;
+        this.html = html;
     }
 
     public Integer getId() {
@@ -54,6 +65,7 @@ public class Type {
         this.rank = rank;
     }
 
+
     @Override
     public String toString() {
         return "Type{" +
@@ -61,6 +73,7 @@ public class Type {
                 ", typename='" + typename + '\'' +
                 ", atype='" + atype + '\'' +
                 ", rank=" + rank +
+                ", html='" + html + '\'' +
                 '}';
     }
 }

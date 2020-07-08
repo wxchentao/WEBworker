@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.demo.bean.User;
 import com.example.demo.dao.IUserDao;
 import com.example.demo.mapper.UserMapper;
@@ -61,6 +62,8 @@ public class UserServiceImpl implements IUserService{
         int result=userMapper.updateById(user);
         return result;
     }
+
+
     @Override
     public User stopUserById(Integer id) {
 
@@ -90,5 +93,15 @@ public class UserServiceImpl implements IUserService{
         User user=userMapper.findByMail(email);
         return user;
     }
+    @Override
+    public List<User> findUserByName(QueryWrapper wrapper)
+    {
+        return userMapper.selectList(wrapper);
+    }
 
+    @Override
+    public User getUserByUname(String uname){
+        User user=userMapper.selectByUname(uname);
+        return user;
+    }
 }

@@ -57,8 +57,9 @@
                     success:function (data) {
                         if(data.code==10000){
                             layer.msg(data.msg,function(){
+                                var uname=data.msg;
                                 //前端跳转页面
-                                location.href='/index'
+                                location.href='/index/'+uname;
                             });
                         }
                         else{
@@ -67,6 +68,7 @@
                     }
                 });
                 return false;
+
             });
         });
     })

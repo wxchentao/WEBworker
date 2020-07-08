@@ -121,7 +121,7 @@
 						<a href="http://zhishiku.little-star.me/?/home/"><i class="icon icon-home"></i> 动态</a>
 					</li>
 					<li>
-						<a href="http://zhishiku.little-star.me/?/column/"><i class="icon icon-column"></i> 专栏</a>
+						<a th:href="@{'/portal_index1/'+${user.uname}}"><i class="icon icon-column"></i> 问题区</a>
 					</li>
 					<li>
 						<a style="font-weight:bold;">· · ·</a>
@@ -137,9 +137,11 @@
 		<!-- end 导航 -->
 		<!-- 用户栏 -->
 		<div class="aw-user-nav">
-			<!-- 登陆&注册栏 -->
-			<a class="login btn btn-normal btn-primary" href="http://zhishiku.little-star.me/?/account/login/">登录</a>
-			<a class="register btn btn-normal btn-success" href="http://zhishiku.little-star.me/?/account/register/">注册</a>						<!-- end 登陆&注册栏 -->
+			<!-- 用户信息&前台首页 -->
+			<td th:text="${user.uname}">user</td>
+			<a class="register btn btn-normal btn-info" th:href="@{'/user/toView2/'+${user.id}}">个人信息</a>
+			<a class="exit btn btn-normal btn-success" th:href="@{'/user/toView3/'+${user.id}}">修改信息</a>
+			<a class="register btn btn-normal btn-danger" href="/user/toPortal_login">切换帐号</a><!-- end 登陆&注册栏 -->
 		</div>
 		<!-- end 用户栏 -->
 		<!-- 发起 -->
@@ -179,28 +181,9 @@
 		<div class="container category">
 			<div class="row">
 				<div class="col-sm-12">
-					<ul class="list">
-						<li class="active"><a href="http://zhishiku.little-star.me/?/explore/">全部</a></li>
-
-						<li>
-							<a href="http://zhishiku.little-star.me/?/explore/category-3">营销技巧</a>
-						</li>
-						<li>
-							<a href="http://zhishiku.little-star.me/?/explore/category-5">营销心理学</a>
-						</li>
-						<li>
-							<a href="http://zhishiku.little-star.me/?/explore/category-7">讲师风采</a>
-						</li>
-						<li>
-							<a href="http://zhishiku.little-star.me/?/explore/category-6">学员风采</a>
-						</li>
-						<li>
-							<a href="http://zhishiku.little-star.me/?/explore/category-2">行政活动</a>
-						</li>
-						<li>
-							<a href="http://zhishiku.little-star.me/?/explore/category-4">面试技巧</a>
-						</li>
-					</ul>
+					<ol class="list" th:each="t:${type}">
+						<li><a th:href="${t.html}" th:text="${t.typename}"></a></li>
+					</ol>
 				</div>
 			</div>
 		</div>
@@ -241,18 +224,18 @@
 								<div th:each="t:${articles}" class="aw-item article" data-topic-id="">
 									<a class="aw-user-name hidden-xs" data-id="1" href="http://zhishiku.little-star.me/?/people/1" rel="nofollow"><img src="../static/portal/index_files/01_avatar_max.jpg" alt=""></a>	<div class="aw-question-content">
 									<h4>
-										<a th:href="@{'http://localhost:8080/article/toView/'+${t.id}}"   th:text="${t.title}"}></a>
-
+										<a th:href="@{'http://localhost:8080/article/toView/'+${t.id}}"   th:text="${t.title}"></a>
 									</h4>
 
 									<p>
-										<a class="aw-question-tags" href="http://zhishiku.little-star.me/?/explore/category-8">IT技能</a>
-										• 							<a href="http://zhishiku.little-star.me/?/people/1" class="aw-user-name">tong</a> <span class="text-color-999">发表了文章 • 0 个评论 • 11 次浏览 • 2020-04-07 16:19</span>
+										<a class="aw-question-tags" th:text="${t.atype}" ></a>
+										•<a th:text="${t.writer}" class="aw-user-name"></a> <span class="text-color-999">在<a th:text="${t.atime}" class="aw-user-name"></a>发表了文章</span>
 										<span class="text-color-999 related-topic collapse"> • 来自相关话题</span>
 									</p>
 
 									<!-- 文章内容调用 -->
-									<div class="markitup-box" onclick="window.location.href=&#39;article/3&#39;" style="cursor: pointer;" th:utext="${t.scontent}">
+									<div>
+										<a	th:href="@{'http://localhost:8080/article/toView/'+${t.id}}"   class="markitup-box"  style="cursor: pointer;" th:utext="${t.scontent}"></a>
 
 									</div>
 

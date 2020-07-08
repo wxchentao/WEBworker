@@ -50,17 +50,17 @@
 
 
         <div class="layui-form-item">
-            <label for="test1" class="layui-form-label">
-                上传头像
-            </label>
-            <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="test1">
-                    <i class="layui-icon">&#xe67c;</i>上传图片
-                </button>
-                <img id="img_headpic" th:src="@{${url}}" width="100px" height="100px">
-                <input type="hidden" id="headpic" name="headpic" th:src="${user.headpic}"/>
-            </div>
+        <label for="test1" class="layui-form-label">
+            上传头像
+        </label>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn" id="test1">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
+            <img id="img_headpic" th:src="@{${url}}" width="100px" height="100px">
+            <input type="hidden" id="headpic" name="headpic" th:src="${user.headpic}"/>
         </div>
+    </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">详情</label>

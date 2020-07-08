@@ -20,7 +20,6 @@
     <![endif]-->
 </head>
 <body>
-
     <!-- 顶部开始 -->
     <div class="container" style="background: #6495ED">
         <div class="logo"><a href="index.html">后台管理系统</a></div>
@@ -38,15 +37,16 @@
           </li>
         </ul>
         <ul class="layui-nav right" lay-filter="">
-          <li class="layui-nav-item">
-            <a href="javascript:;" >admin</a>
-            <dl class="layui-nav-child"> <!-- 二级菜单 -->
-              <dd><a onclick="x_admin_show('个人信息','/user/toView/'+data.id)">个人信息</a></dd>
-              <dd><a onclick="x_admin_show('切换帐号','/user/toLogin')">切换帐号</a></dd>
-              <dd><a href="./login.html">退出</a></dd>
-            </dl>
-          </li>
-          <li class="layui-nav-item to-index"><a href="/portal_index">前台首页</a></li>
+            <li class="layui-nav-item">
+                <td th:text="${user.uname}">user</td>
+                <!--<a th:value="${user.uname}"></a>-->
+                <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                    <dd><a th:onclick="javascript:x_admin_show('个人信息','/user/toView/[[${user.id}]]')">个人信息</a></dd>
+                    <dd><a th:onclick="javascript:x_admin_show('切换帐号','/user/toEdit2/[[${user.id}]]')">修改信息</a></dd>
+                    <dd><a href="/user/toLogin">退出</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item to-index"><a href="/user/toPortal_login">前台首页</a></li>
         </ul>
         
     </div>
@@ -139,20 +139,41 @@
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
-                    <cite>资源空间</cite>
+                    <cite>内容设置</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
-					<li>
-					    <a _href="global-resource-list.html">
-					        <i class="iconfont">&#xe6a7;</i>
-					        <cite>公共资源</cite>
-					    </a>
-					</li >
                     <li>
-                        <a _href="my-resource-list.html">
+                        <a _href="/type/list">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>我的资源</cite>
+                            <cite>分类管理</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe723;</i>
+                    <cite>问题设置</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="/question/manage">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>问题管理</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="/portal_index1">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>问题管理前端</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="/comment/list">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>评论管理</cite>
                         </a>
                     </li >
                 </ul>
@@ -193,9 +214,6 @@
 			        </li >
 			    </ul>
 			</li>
-
-
-
 
             <li>
                 <a href="javascript:;">
@@ -244,7 +262,7 @@
                         </a>
                     </li >
                     <li>
-                        <a _href="echarts2.html">
+                        <a _href="/user/BarGraph">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>柱状图</cite>
                         </a>

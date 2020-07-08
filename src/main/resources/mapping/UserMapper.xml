@@ -36,4 +36,8 @@
 <select id="findByMail" resultMap="UserResultMap">
         select a.* from t_user a where email=#{email}
     </select>
+    <select id="selectByUname" resultMap="UserResultMap">
+    select a.* from t_user a where uname=#{uname}
+</select>
+
 </mapper>

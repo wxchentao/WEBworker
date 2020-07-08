@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.example.demo.Result.Result;
 import com.example.demo.Result.ResultUtils;
 import com.example.demo.bean.Article;
 import com.example.demo.bean.User;
 import com.example.demo.service.IArticleService;
-import com.sun.deploy.nativesandbox.NativeSandboxBroker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,9 +33,11 @@ public class ArticleController {
     }
 
     @RequestMapping("/getArticles")
-    public Result getArticles(){
+    public Result getArticles(@RequestParam(value="title",required = false,defaultValue = "") String title){
         Result result=null;
-        List<Article> list=articleService.getArticles();
+        QueryWrapper<Article> wrapper = new QueryWrapper();
+        wrapper.like("title", title);
+        List<Article> list=articleService.findArticlesByName(wrapper);
         result=ResultUtils.success(list);
         result.setCode(0);
         result.setMsg("查询成功");
